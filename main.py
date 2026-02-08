@@ -2,6 +2,7 @@ from nnfs.datasets import spiral_data
 from LayerDense import LayerDense
 from ActivationReLU import ActivationReLU
 from ActivationSoftmax import ActivationSoftmax
+from LossCategoricalCrossEntrophy import LossCategoricalCrossEntropy
 
 # Create dataset
 X, y = spiral_data(samples=100, classes=3)
@@ -14,6 +15,9 @@ activation1 = ActivationReLU()
 dense2 = LayerDense(3, 3)
 # Create Softmax activation (to be used with Dense layer):
 activation2 = ActivationSoftmax()
+
+#Create loss function
+loss_function = LossCategoricalCrossEntropy()
 
 # Make a forward pass of our training data through this layer
 dense1.forward(X)
@@ -29,3 +33,8 @@ dense2.forward(activation1.output)
 activation2.forward(dense2.output)
 # Let's see output of the first few samples:
 print(activation2.output[:5])
+
+#y below is the 1 shot array with exact results
+loss = loss_function.calculate(activation2.output, y)
+
+print('loss', loss)
