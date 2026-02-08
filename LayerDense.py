@@ -11,11 +11,3 @@ class LayerDense:
 
     def forward(self, inputs):
         self.output = np.dot(inputs, self.weights) + self.biases
-
-X, y = spiral_data(samples=100, classes=3)
-
-dense1 = LayerDense(2, 3)
-
-dense1.forward(X)
-
-print(dense1.output[:5])

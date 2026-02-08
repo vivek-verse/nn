@@ -1,37 +1,31 @@
-import numpy as np
+from nnfs.datasets import spiral_data
+from LayerDense import LayerDense
+from ActivationReLU import ActivationReLU
+from ActivationSoftmax import ActivationSoftmax
 
-inputs = [
-    [1, 2, 3, 2.5],
-    [2., .5, -1., 2],
-    [-1.5, 2.7, 3.3, -0.8]
-]
+# Create dataset
+X, y = spiral_data(samples=100, classes=3)
+# Create Dense layer with 2 input features and 3 output values
+dense1 = LayerDense(2, 3)
+# Create ReLU activation (to be used with Dense layer):
+activation1 = ActivationReLU()
+# Create second Dense layer with 3 input features (as we take output
+# of previous layer here) and 3 output values
+dense2 = LayerDense(3, 3)
+# Create Softmax activation (to be used with Dense layer):
+activation2 = ActivationSoftmax()
 
-weights = [
-    [0.2, 0.8, -0.5, 1],
-    [0.5, -0.91, 0.26, -0.5],
-    [-0.26, -0.27, 0.17, 0.87]
-]
+# Make a forward pass of our training data through this layer
+dense1.forward(X)
 
-biases = [2, 3, 0.5]
-
-weights2 = [
-    [0.1, -0.14, 0.5],
-    [-0.5, 0.12, -0.33],
-    [-0.44, 0.73, -0.13]
-]
-
-biases2 = [-1, 2, -0.5]
-
-inputs_array = np.array(inputs)
-weights_array = np.array(weights)
-biases_array = np.array(biases)
-weights2_array = np.array(weights2)
-biases2_array = np.array(biases2)
-
-layer1_outputs = np.dot(inputs_array, weights_array.T) + biases_array
-
-layer2_outputs = np.dot(layer1_outputs, weights2_array.T) + biases2_array
-
-# print(layer2_outputs)
-
-print(np.random.randn(2, 3))
+# Make a forward pass through activation function
+# it takes the output of first dense layer here
+activation1.forward(dense1.output)
+# Make a forward pass through second Dense layer
+# it takes outputs of activation function of first layer as inputs
+dense2.forward(activation1.output)
+# Make a forward pass through activation function
+# it takes the output of second dense layer here
+activation2.forward(dense2.output)
+# Let's see output of the first few samples:
+print(activation2.output[:5])
